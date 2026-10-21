@@ -18,7 +18,6 @@ interface QueuedEvent {
   eventType: 'pageview' | 'custom';
   source: 'browser';
   anonymousId: string;
-  sessionId: string | null;
   userId: string | null;
   url?: string;
   referrer?: string;
@@ -42,10 +41,7 @@ export class EventPulse {
       ...options,
     };
 
-    this.identity = new IdentityManager(
-      isBrowser ? window.localStorage : null,
-      isBrowser ? window.sessionStorage : null,
-    );
+    this.identity = new IdentityManager(isBrowser ? window.localStorage : null);
     this.queue = new PersistentQueue<QueuedEvent>(isBrowser ? window.localStorage : null);
 
     if (!isBrowser) return;
@@ -72,13 +68,12 @@ export class EventPulse {
 
   /**
    * Current visitor identity. Useful for attributing a server-side event
-   * (e.g. an order placed via a REST call) back to this browser session —
-   * pass these along in the request body/headers to your backend.
+   * (e.g. an order placed via a REST call) back to this browser's visitor —
+   * pass this along in the request body/headers to your backend.
    */
-  getIdentity(): { anonymousId: string; sessionId: string | null; userId: string | null } {
+  getIdentity(): { anonymousId: string; userId: string | null } {
     return {
       anonymousId: this.identity.getAnonymousId(),
-      sessionId: this.identity.touchSession(),
       userId: this.identity.getUserId(),
     };
   }
@@ -155,7 +150,6 @@ export class EventPulse {
       eventType,
       source: 'browser',
       anonymousId: this.identity.getAnonymousId(),
-      sessionId: this.identity.touchSession(),
       userId: this.identity.getUserId(),
       url,
       referrer: document.referrer || undefined,

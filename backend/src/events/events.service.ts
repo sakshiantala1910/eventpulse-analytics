@@ -48,7 +48,6 @@ export class EventsService {
       eventType: dto.eventType,
       source: dto.source,
       anonymousId: dto.anonymousId,
-      sessionId: dto.sessionId ?? null,
       userId: dto.userId ?? null,
       url: dto.url ?? null,
       referrer: dto.referrer ?? null,

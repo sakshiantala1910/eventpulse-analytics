@@ -30,11 +30,6 @@ export class CreateEventDto {
   @IsOptional()
   @IsString()
   @MaxLength(64)
-  sessionId?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(64)
   userId?: string;
 
   // Required for pageview events, optional otherwise.

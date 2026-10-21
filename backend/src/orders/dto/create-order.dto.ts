@@ -28,14 +28,9 @@ export class CreateOrderDto {
   items: OrderItemDto[];
 
   // Forwarded from the browser SDK so the resulting order_created server
-  // event can be attributed back to the visitor's session.
+  // event can be attributed back to the visitor who placed it.
   @IsOptional()
   @IsString()
   @MaxLength(64)
   anonymousId?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(64)
-  sessionId?: string;
 }

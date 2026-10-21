@@ -36,7 +36,6 @@ export class OrdersService {
       items: dto.items,
       total,
       anonymousId: dto.anonymousId ?? null,
-      sessionId: dto.sessionId ?? null,
     });
     await this.ordersRepository.save(order);
 
@@ -50,10 +49,7 @@ export class OrdersService {
         itemCount: dto.items.reduce((sum, item) => sum + item.quantity, 0),
         items: dto.items.map((item) => item.name),
       },
-      {
-        anonymousId: dto.anonymousId,
-        sessionId: dto.sessionId,
-      },
+      { anonymousId: dto.anonymousId },
     );
 
     return { id: order.id, total };

@@ -38,7 +38,6 @@ export default function CheckoutPage() {
           customerName: customerName || undefined,
           items: lines.map((line) => ({ name: line.item.name, price: line.item.price, quantity: line.quantity })),
           anonymousId: identity.anonymousId,
-          sessionId: identity.sessionId ?? undefined,
         }),
       });
 

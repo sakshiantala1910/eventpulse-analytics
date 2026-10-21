@@ -1,6 +1,5 @@
 export interface EventIdentity {
   anonymousId?: string;
-  sessionId?: string;
   userId?: string;
 }
 
@@ -90,7 +89,6 @@ export class EventPulseClient {
       eventType: 'server',
       source: 'server',
       anonymousId: identity.anonymousId ?? `server-${randomId()}`,
-      sessionId: identity.sessionId ?? null,
       userId: identity.userId ?? null,
       properties,
       occurredAt: (occurredAt ?? new Date()).toISOString(),

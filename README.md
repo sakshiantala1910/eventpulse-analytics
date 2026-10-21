@@ -119,7 +119,7 @@ const eventpulse = new EventPulse({
 eventpulse.page('/menu');                       // manual pageview (e.g. after a client-side route change)
 eventpulse.track('add_to_cart', { itemId: 'margherita', price: 12.5 });
 eventpulse.identify('user_42');                 // attach a known user id to future events
-eventpulse.getIdentity();                       // { anonymousId, sessionId, userId } — forward to your backend to attribute server-side events
+eventpulse.getIdentity();                       // { anonymousId, userId } — forward to your backend to attribute server-side events
 ```
 
 Also usable with no build step at all via a `<script>` tag:
@@ -190,7 +190,7 @@ Single `events` table (see [`backend/src/events/event.entity.ts`](backend/src/ev
 | `event_type` | `pageview` \| `custom` \| `server` |
 | `source` | `browser` \| `server` |
 | `anonymous_id` | Always present — see identity model below |
-| `session_id`, `user_id` | Nullable |
+| `user_id` | Nullable |
 | `url`, `referrer` | Pageview context |
 | `properties` | Arbitrary JSON payload |
 | `ip_hash` | SHA-256 hash, salted — raw IPs are never stored |
@@ -198,9 +198,9 @@ Single `events` table (see [`backend/src/events/event.entity.ts`](backend/src/ev
 
 **Identity model:**
 - `anonymousId` — generated once per browser (`crypto.randomUUID()`), persisted in `localStorage`. This is the primary join key for "unique visitors."
-- `sessionId` — persisted in `sessionStorage` with a 30-minute rolling idle timeout; resets on a new tab or after the timeout.
 - `userId` — optional, set via `identify()`. Persisted in `localStorage` so once a visitor is known, later pageviews stay attributed without calling `identify()` again. **No anonymous→user alias merging is implemented** — events recorded before `identify()` is called keep their original `anonymousId` only (see Limitations).
-- Server-originated events (e.g. `order_created`) forward the browser's `anonymousId`/`sessionId` when the caller has them (the checkout form does this), so an order can be joined back to the visitor who placed it. Server calls with no browser context get a synthetic `server-<random>` id and simply won't show up as a "visitor."
+- Server-originated events (e.g. `order_created`) forward the browser's `anonymousId` when the caller has it (the checkout form does this), so an order can be joined back to the visitor who placed it. Server calls with no browser context get a synthetic `server-<random>` id and simply won't show up as a "visitor."
+- No per-visit (session) grouping is implemented — only a lifetime `anonymousId` and an optional `userId`. A session concept (grouping events by visit, with an idle timeout) would be a natural next addition but isn't needed for the metrics this assignment asks for (traffic, unique visitors, popular pages, trends), so it was left out rather than built and left unused.
 
 ## Key decisions
 

@@ -23,9 +23,6 @@ export class Order {
   @Column({ name: 'anonymous_id', type: 'varchar', length: 64, nullable: true })
   anonymousId: string | null;
 
-  @Column({ name: 'session_id', type: 'varchar', length: 64, nullable: true })
-  sessionId: string | null;
-
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 }

@@ -28,10 +28,6 @@ export class Event {
   @Index()
   anonymousId: string;
 
-  @Column({ name: 'session_id', type: 'varchar', length: 64, nullable: true })
-  @Index()
-  sessionId: string | null;
-
   @Column({ name: 'user_id', type: 'varchar', length: 64, nullable: true })
   @Index()
   userId: string | null;
