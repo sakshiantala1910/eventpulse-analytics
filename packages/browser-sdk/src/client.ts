@@ -48,10 +48,7 @@ export class EventPulse {
 
     this.flushTimer = setInterval(() => void this.flush(), this.options.flushIntervalMs);
 
-    // Best-effort delivery on tab close/navigation: sendBeacon doesn't
-    // support custom headers, so the API key travels as a query param here
-    // (acceptable since the ingest key is a write-only, rate-limited key,
-    // not a secret — see README security notes).
+    // sendBeacon can't set headers, so the (non-secret) ingest key travels as a query param here on tab close/navigation.
     window.addEventListener('pagehide', () => this.flush(true));
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') this.flush(true);

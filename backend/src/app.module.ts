@@ -12,8 +12,7 @@ import { OrdersModule } from './orders/orders.module';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        // Tests set DB_PATH=:memory: for an isolated, disposable database;
-        // that's a sqlite keyword, not a path, so it's used as-is.
+        // :memory: is a sqlite keyword (used by tests), not a path, so it's used as-is.
         const dbPath = config.getOrThrow<string>('DB_PATH');
 
         return {

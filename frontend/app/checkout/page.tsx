@@ -47,11 +47,7 @@ export default function CheckoutPage() {
 
       const data = await response.json();
 
-      // The backend already fires `order_created` as a server-side event via
-      // the Node server SDK. This browser-side event is a *different* signal
-      // (confirms the client actually rendered + reached the success state)
-      // — both show up in the dashboard, demonstrating browser + server
-      // tracking of the same business moment from two vantage points.
+      // Distinct from the backend's server-side `order_created` — confirms the client reached the success state.
       getEventPulse().track('order_completed', { orderId: data.id, total: data.total });
 
       setConfirmedOrderId(data.id);
@@ -75,10 +71,7 @@ export default function CheckoutPage() {
     );
   }
 
-  // The server always renders an empty cart (sessionStorage isn't available
-  // server-side). Showing this same "empty" branch until the client has
-  // loaded the real cart keeps the first client render identical to what
-  // the server sent, avoiding a hydration mismatch.
+  // Matches the server's empty-cart render until the client loads the real cart, avoiding a hydration mismatch.
   if (!isHydrated || lines.length === 0) {
     return (
       <div className="mx-auto max-w-lg px-6 py-20 text-center">

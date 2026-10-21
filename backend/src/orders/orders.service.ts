@@ -39,8 +39,7 @@ export class OrdersService {
     });
     await this.ordersRepository.save(order);
 
-    // Fire-and-forget from the caller's perspective: track() fails soft, so
-    // a flaky analytics endpoint never blocks order confirmation.
+    // Fire-and-forget: track() fails soft, so a flaky analytics endpoint never blocks order confirmation.
     void this.eventPulse.track(
       'order_created',
       {

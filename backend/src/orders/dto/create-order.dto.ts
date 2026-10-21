@@ -27,8 +27,7 @@ export class CreateOrderDto {
   @Type(() => OrderItemDto)
   items: OrderItemDto[];
 
-  // Forwarded from the browser SDK so the resulting order_created server
-  // event can be attributed back to the visitor who placed it.
+  // Forwarded from the browser SDK so the resulting order_created event attributes back to the visitor.
   @IsOptional()
   @IsString()
   @MaxLength(64)

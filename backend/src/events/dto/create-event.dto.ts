@@ -32,7 +32,6 @@ export class CreateEventDto {
   @MaxLength(64)
   userId?: string;
 
-  // Required for pageview events, optional otherwise.
   @ValidateIf((o) => o.eventType === 'pageview')
   @IsString()
   @IsNotEmpty()

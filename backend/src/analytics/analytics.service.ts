@@ -16,8 +16,7 @@ export class AnalyticsService {
     const [totalEvents, totalPageviews, uniqueVisitors, totalOrders] = await Promise.all([
       base().getCount(),
       base().andWhere('e.event_type = :type', { type: 'pageview' }).getCount(),
-      // Scoped to pageviews only: server-originated events (e.g. order_created)
-      // don't carry a real visitor identity and would otherwise inflate this count.
+      // Scoped to pageviews only — server-originated events lack a real visitor identity.
       base()
         .andWhere('e.event_type = :type', { type: 'pageview' })
         .select('COUNT(DISTINCT e.anonymous_id)', 'count')

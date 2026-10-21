@@ -17,7 +17,6 @@ export class ApiKeyGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    // No @RequireApiKey() on this route: leave it open.
     if (!keyType) {
       return true;
     }
@@ -26,9 +25,7 @@ export class ApiKeyGuard implements CanActivate {
       keyType === 'ingest' ? 'EVENTPULSE_INGEST_API_KEY' : 'EVENTPULSE_DASHBOARD_API_KEY',
     );
     const request = context.switchToHttp().getRequest();
-    // navigator.sendBeacon can't set custom headers, so the browser SDK's
-    // unload-time flush passes the key as a query param instead. Only
-    // relevant for the (write-only, non-secret-grade) ingest key.
+    // sendBeacon can't set headers, so the browser SDK's unload flush sends the (non-secret) ingest key as a query param instead.
     const provided = request.headers['x-api-key'] ?? request.query?.apiKey;
 
     if (!configured || !provided || !this.safeEqual(configured, provided)) {

@@ -2,9 +2,7 @@ process.env.DB_PATH = ':memory:';
 process.env.EVENTPULSE_INGEST_API_KEY = 'test-ingest-key';
 process.env.EVENTPULSE_DASHBOARD_API_KEY = 'test-dashboard-key';
 process.env.EVENTPULSE_MAX_BATCH_SIZE = '50';
-// OrdersService's EventPulseClient posts back to this same app's own HTTP
-// server (http://localhost:PORT), so the app must actually be listening
-// here rather than only wrapped by supertest's in-memory server.
+// The app must actually listen here since EventPulseClient posts back to its own HTTP server, not just supertest's in-memory wrapper.
 process.env.PORT = '8199';
 process.env.EVENTPULSE_BACKEND_URL = 'http://localhost:8199';
 

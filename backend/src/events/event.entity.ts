@@ -22,8 +22,7 @@ export class Event {
   @Index()
   source: EventSource;
 
-  // Identity model: anonymous_id is always present (persisted client-side),
-  // user_id is attached once the demo app identifies a logged-in user.
+  // anonymous_id is always present; user_id is attached once the demo app identifies a logged-in user.
   @Column({ name: 'anonymous_id', type: 'varchar', length: 64 })
   @Index()
   anonymousId: string;
@@ -47,8 +46,7 @@ export class Event {
   @Column({ type: 'simple-json', nullable: true })
   properties: Record<string, unknown> | null;
 
-  // occurred_at is client/caller-reported (may lag received_at slightly due
-  // to batching/network delay); received_at is server truth.
+  // occurred_at is client/caller-reported (may lag received_at); received_at is server truth.
   @Column({ name: 'occurred_at', type: 'datetime' })
   @Index()
   occurredAt: Date;

@@ -15,10 +15,6 @@ interface CartContextValue {
   clear: () => void;
   total: number;
   itemCount: number;
-  // False during SSR and the first client render, true once the cart has
-  // been loaded from sessionStorage. The server has no access to that
-  // storage, so anything that renders differently based on cart contents
-  // must wait for this to avoid a hydration mismatch (see Nav.tsx).
   isHydrated: boolean;
 }
 
@@ -30,15 +26,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
-  // Cart lives in sessionStorage: it's demo scratch state, not something
-  // that needs to persist across browser restarts like the SDK's identity.
-  //
-  // This intentionally violates react-hooks/set-state-in-effect: sessionStorage
-  // doesn't exist during SSR, so reading it can only happen after mount, and
-  // the resulting state update can only land as a post-mount effect — not a
-  // lazy useState initializer, which would run during the first render and
-  // diverge from what the server sent (the exact hydration mismatch fixed
-  // earlier in Nav.tsx / checkout/page.tsx via the isHydrated flag below).
+  // sessionStorage isn't available during SSR, so loading it has to happen post-mount (not a lazy useState initializer).
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);

@@ -17,8 +17,7 @@ async function bootstrap() {
     }),
   );
 
-  // Comma-separated so the demo can be opened from more than one origin at
-  // once (e.g. http://localhost:3000 and a LAN IP for testing on a phone).
+  // Comma-separated so the demo can be opened from more than one origin at once (e.g. localhost + a LAN IP).
   const allowedOrigins = config
     .getOrThrow<string>("FRONTEND_URL")
     .split(",")
