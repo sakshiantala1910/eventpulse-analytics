@@ -18,7 +18,6 @@ export function getEventPulse(): EventPulse {
       apiHost: requireEnv('NEXT_PUBLIC_EVENTPULSE_API_HOST', process.env.NEXT_PUBLIC_EVENTPULSE_API_HOST),
       autoTrackPageviews: false,
       onError: (message) => {
-        // eslint-disable-next-line no-console
         console.warn('[EventPulse]', message);
       },
     });
