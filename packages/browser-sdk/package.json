@@ -1,0 +1,28 @@
+{
+  "name": "@eventpulse/browser-sdk",
+  "version": "1.0.0",
+  "description": "Framework-agnostic browser SDK for tracking page views and custom events to EventPulse.",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/index.global.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm,iife --global-name EventPulse --dts --clean --minify --out-dir dist",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

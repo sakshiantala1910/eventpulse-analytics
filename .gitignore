@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+.next/
+coverage/
+*.log
+.env
+.env.local
+.DS_Store
+
+# SQLite data files (generated locally; schema auto-syncs via TypeORM)
+*.sqlite
+*.sqlite3
+
+# Nest/TS build artifacts
+backend/dist/
+backend/database/*.sqlite
