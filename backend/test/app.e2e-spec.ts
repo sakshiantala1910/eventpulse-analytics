@@ -6,6 +6,7 @@ process.env.EVENTPULSE_MAX_BATCH_SIZE = '50';
 // server (http://localhost:PORT), so the app must actually be listening
 // here rather than only wrapped by supertest's in-memory server.
 process.env.PORT = '8199';
+process.env.EVENTPULSE_BACKEND_URL = 'http://localhost:8199';
 
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';

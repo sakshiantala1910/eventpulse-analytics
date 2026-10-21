@@ -15,6 +15,11 @@ interface CartContextValue {
   clear: () => void;
   total: number;
   itemCount: number;
+  // False during SSR and the first client render, true once the cart has
+  // been loaded from sessionStorage. The server has no access to that
+  // storage, so anything that renders differently based on cart contents
+  // must wait for this to avoid a hydration mismatch (see Nav.tsx).
+  isHydrated: boolean;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -62,7 +67,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const itemCount = lines.reduce((sum, line) => sum + line.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ lines, addItem, removeItem, clear, total, itemCount }}>
+    <CartContext.Provider value={{ lines, addItem, removeItem, clear, total, itemCount, isHydrated: hydrated }}>
       {children}
     </CartContext.Provider>
   );

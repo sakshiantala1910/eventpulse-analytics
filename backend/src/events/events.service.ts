@@ -69,7 +69,7 @@ export class EventsService {
    * event doesn't reject the whole flush from the browser SDK's queue.
    */
   async ingestBatch(events: Record<string, unknown>[], context: IngestContext): Promise<BatchIngestResult> {
-    const maxBatchSize = this.config.get<number>('EVENTPULSE_MAX_BATCH_SIZE', 50);
+    const maxBatchSize = this.config.getOrThrow<number>('EVENTPULSE_MAX_BATCH_SIZE');
     const limited = events.slice(0, maxBatchSize);
 
     let accepted = 0;
@@ -101,7 +101,7 @@ export class EventsService {
       return null;
     }
 
-    const salt = this.config.get<string>('EVENTPULSE_INGEST_API_KEY', 'eventpulse');
+    const salt = this.config.getOrThrow<string>('EVENTPULSE_INGEST_API_KEY');
 
     return createHash('sha256').update(ip + salt).digest('hex');
   }

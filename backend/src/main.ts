@@ -1,13 +1,13 @@
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { AppModule } from './app.module';
+import { NestFactory } from "@nestjs/core";
+import { ValidationPipe } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix("api");
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -17,13 +17,22 @@ async function bootstrap() {
     }),
   );
 
+  // Comma-separated so the demo can be opened from more than one origin at
+  // once (e.g. http://localhost:3000 and a LAN IP for testing on a phone).
+  const allowedOrigins = config
+    .getOrThrow<string>("FRONTEND_URL")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
   app.enableCors({
-    origin: config.get<string>('FRONTEND_URL', 'http://localhost:3000'),
+    origin: allowedOrigins,
   });
 
-  const port = config.get<number>('PORT', 8000);
+  const port = config.getOrThrow<number>("PORT");
   await app.listen(port);
-  // eslint-disable-next-line no-console
-  console.log(`EventPulse backend listening on http://localhost:${port}`);
+  console.log(
+    `EventPulse backend listening on ${config.getOrThrow<string>("EVENTPULSE_BACKEND_URL")}`,
+  );
 }
 bootstrap();

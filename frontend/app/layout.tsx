@@ -26,6 +26,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      // A browser/dev-tools extension (seen injecting data-locator-target)
+      // can mutate <html> before React hydrates, which isn't an app bug —
+      // see https://nextjs.org/docs/messages/react-hydration-error
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-neutral-50 text-neutral-900">
         <CartProvider>

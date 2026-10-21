@@ -8,6 +8,9 @@ coverage/
 .env.local
 .DS_Store
 
+# Local dev-tooling config, not meant to be shared in the repo
+.claude/
+
 # SQLite data files (generated locally; schema auto-syncs via TypeORM)
 *.sqlite
 *.sqlite3

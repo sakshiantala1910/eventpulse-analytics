@@ -22,8 +22,8 @@ export class OrdersService {
     private readonly config: ConfigService,
   ) {
     this.eventPulse = new EventPulseClient({
-      baseUrl: `http://localhost:${this.config.get<number>('PORT', 8000)}`,
-      apiKey: this.config.get<string>('EVENTPULSE_INGEST_API_KEY', ''),
+      baseUrl: this.config.getOrThrow<string>('EVENTPULSE_BACKEND_URL'),
+      apiKey: this.config.getOrThrow<string>('EVENTPULSE_INGEST_API_KEY'),
       onError: (error) => this.logger.warn(`EventPulse track failed: ${JSON.stringify(error)}`),
     });
   }

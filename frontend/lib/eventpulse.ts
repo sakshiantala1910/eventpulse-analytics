@@ -1,6 +1,7 @@
 'use client';
 
 import { EventPulse } from '@eventpulse/browser-sdk';
+import { requireEnv } from './env';
 
 let instance: EventPulse | null = null;
 
@@ -13,8 +14,8 @@ let instance: EventPulse | null = null;
 export function getEventPulse(): EventPulse {
   if (!instance) {
     instance = new EventPulse({
-      apiKey: process.env.NEXT_PUBLIC_EVENTPULSE_INGEST_API_KEY ?? '',
-      apiHost: process.env.NEXT_PUBLIC_EVENTPULSE_API_HOST ?? 'http://localhost:8000',
+      apiKey: requireEnv('NEXT_PUBLIC_EVENTPULSE_INGEST_API_KEY', process.env.NEXT_PUBLIC_EVENTPULSE_INGEST_API_KEY),
+      apiHost: requireEnv('NEXT_PUBLIC_EVENTPULSE_API_HOST', process.env.NEXT_PUBLIC_EVENTPULSE_API_HOST),
       autoTrackPageviews: false,
       onError: (message) => {
         // eslint-disable-next-line no-console

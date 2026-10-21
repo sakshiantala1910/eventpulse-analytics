@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/components/CartContext';
 import { getEventPulse } from '@/lib/eventpulse';
+import { requireEnv } from '@/lib/env';
 
-const API_HOST = process.env.NEXT_PUBLIC_EVENTPULSE_API_HOST ?? 'http://localhost:8000';
+const API_HOST = requireEnv('NEXT_PUBLIC_EVENTPULSE_API_HOST', process.env.NEXT_PUBLIC_EVENTPULSE_API_HOST);
 
 export default function CheckoutPage() {
-  const { lines, total, removeItem, clear } = useCart();
+  const { lines, total, removeItem, clear, isHydrated } = useCart();
   const [customerName, setCustomerName] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -75,7 +76,11 @@ export default function CheckoutPage() {
     );
   }
 
-  if (lines.length === 0) {
+  // The server always renders an empty cart (sessionStorage isn't available
+  // server-side). Showing this same "empty" branch until the client has
+  // loaded the real cart keeps the first client render identical to what
+  // the server sent, avoiding a hydration mismatch.
+  if (!isHydrated || lines.length === 0) {
     return (
       <div className="mx-auto max-w-lg px-6 py-20 text-center">
         <h1 className="text-2xl font-bold">Your cart is empty</h1>

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useCart } from './CartContext';
 
 export function Nav() {
-  const { itemCount } = useCart();
+  const { itemCount, isHydrated } = useCart();
 
   return (
     <header className="border-b border-black/10 bg-white">
@@ -17,7 +17,11 @@ export function Nav() {
             Menu
           </Link>
           <Link href="/checkout" className="hover:text-black">
-            Checkout {itemCount > 0 && <span className="ml-1 rounded-full bg-black px-2 py-0.5 text-xs text-white">{itemCount}</span>}
+            {/* isHydrated gates this: the server always renders an empty cart
+                (it has no access to sessionStorage), so showing the badge
+                before the client has loaded the real cart would mismatch
+                whatever the server actually sent. */}
+            Checkout {isHydrated && itemCount > 0 && <span className="ml-1 rounded-full bg-black px-2 py-0.5 text-xs text-white">{itemCount}</span>}
           </Link>
           <Link href="/dashboard" className="hover:text-black">
             Dashboard

@@ -11,14 +11,19 @@ import { OrdersModule } from './orders/orders.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'better-sqlite3',
-        // Tests set DB_PATH=:memory: for an isolated, disposable database.
-        database: config.get<string>('DB_PATH') ?? join(__dirname, '..', 'database', 'eventpulse.sqlite'),
-        autoLoadEntities: true,
-        // Fine for this take-home demo; a real project would use migrations.
-        synchronize: true,
-      }),
+      useFactory: (config: ConfigService) => {
+        // Tests set DB_PATH=:memory: for an isolated, disposable database;
+        // that's a sqlite keyword, not a path, so it's used as-is.
+        const dbPath = config.getOrThrow<string>('DB_PATH');
+
+        return {
+          type: 'better-sqlite3',
+          database: dbPath === ':memory:' ? dbPath : join(__dirname, '..', dbPath),
+          autoLoadEntities: true,
+          // Fine for this take-home demo; a real project would use migrations.
+          synchronize: true,
+        };
+      },
     }),
     EventsModule,
     AnalyticsModule,

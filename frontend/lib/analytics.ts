@@ -1,7 +1,8 @@
 import 'server-only';
+import { requireEnv } from './env';
 
-const BACKEND_URL = process.env.EVENTPULSE_BACKEND_URL ?? 'http://localhost:8000';
-const DASHBOARD_API_KEY = process.env.EVENTPULSE_DASHBOARD_API_KEY ?? '';
+const BACKEND_URL = requireEnv('EVENTPULSE_BACKEND_URL', process.env.EVENTPULSE_BACKEND_URL);
+const DASHBOARD_API_KEY = requireEnv('EVENTPULSE_DASHBOARD_API_KEY', process.env.EVENTPULSE_DASHBOARD_API_KEY);
 
 export interface Summary {
   total_events: number;
